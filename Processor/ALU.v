@@ -1,4 +1,4 @@
-module ALU(input enable, input [0:1] op, input [0:3] n1, input [0:3] n2, output reg [3:0] out);
+module ALU(input enable, input [1:0] op, input [3:0] n1, input [3:0] n2, output reg [3:0] out);
         always @ (enable) begin
                 if (enable) begin
                         case(op)

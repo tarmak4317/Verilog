@@ -1,9 +1,9 @@
 module test_Processor;
-        reg [0:7] sig;
+        reg [7:0] sig;
         Processor uut(.sig(sig));
         initial begin
                 $dumpfile("Processor.vcd");
-                $dumpvars("0,test_Processor");
+                $dumpvars(0,test_Processor);
                 sig = 8'b10010011;#10;
                 sig = 8'b10100001;#10;
                 sig = 8'b00010000;#10;
