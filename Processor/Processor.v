@@ -1,7 +1,8 @@
 module Processor(input [7:0] sig);
         reg [3:0] registers[0:4];
         reg enable;
-        ALU ALU1(.enable(enable),.op(sig[3:2]),.n1(registers[3]),.n2(registers[0]),.out(registers[0]));
+        wire [3:0] alu_out;
+        ALU ALU1(.enable(enable),.op(sig[3:2]),.n1(registers[3]),.n2(registers[0]),.out(alu_out));
         always @ (sig) begin
                 enable = 1'b0;
                 case(sig[1:0])
@@ -12,6 +13,7 @@ module Processor(input [7:0] sig);
                               	 registers[3] = registers[0];
                               	 registers[0] = registers[sig[5:4]];
                               	 enable = 1'b1;
+                              	 registers[0] = alu_out;
                                end
                 endcase
         end
