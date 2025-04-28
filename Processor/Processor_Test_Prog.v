@@ -24,6 +24,7 @@ module Processor_Test_Prog;
 		mem_write = 1'b1;portin = 4'b0001;instr = 4'b0101;#10;
 		mem_write = 1'b1;portin = 4'b0000;instr = 4'b0000;#10;
 		mem_write = 1'b1;portin = 4'b0000;instr = 4'b0111;#10;
+		mem_write = 1'b1;portin = 4'b1001;instr = 4'b1001;#10;
 		PC_reset = 1'b1;mem_write = 1'b0;#10;
 		PC_reset = 1'b0;
 		#200;
