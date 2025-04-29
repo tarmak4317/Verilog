@@ -1,6 +1,7 @@
 module Control_Prog(input clk, input mem_write, input PC_reset, input [3:0]portin, input [3:0]instr, output reg [3:0]portout);
 	reg mem_enable;
 	reg alu_enable;
+	reg out_enable;
 	reg transfer_enable;
 	reg jmp_enable;
 	reg rw;
@@ -24,12 +25,15 @@ module Control_Prog(input clk, input mem_write, input PC_reset, input [3:0]porti
 	end
 	always @ (posedge clk) begin
 		if(~mem_write & ~PC_reset) begin
+			if(out_enable)
+				portout <= Y;
 			if(mem_enable)
 				Y <= mem_out;
 			if(alu_enable)
 				Y <= alu_out;
 			if(transfer_enable)
 				Y1 <= Y;
+			out_enable <= 1'b0;
 			alu_enable <= 1'b0;
 			mem_enable <= 1'b0;
 			transfer_enable <= 1'b0;
@@ -48,15 +52,9 @@ module Control_Prog(input clk, input mem_write, input PC_reset, input [3:0]porti
 						mem_enable <= 1'b1;
 					 end
 				4'b0110: Y <= PM[PC][3:0];
-				4'b0111: portout <= Y;
+				4'b0111: out_enable <= 1'b1;
 				4'b1000: transfer_enable <= 1'b1;
 				4'b1001: jmp_enable <= 1'b1;
-				4'b1010: begin
-					 	mem_enable <= 1'b0;
-					 	alu_enable <= 1'b0;
-					 	rw <= 1'b0;
-					 	PC <= 4'b0000;
-					 end
 			endcase
 		end
 	end
