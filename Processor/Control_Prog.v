@@ -7,12 +7,14 @@ module Control_Prog(input clk, input mem_write, input PC_reset, input [3:0]porti
 	reg rw;
 	wire [3:0]mem_out;
 	wire [3:0]alu_out;
+	wire carry_out;
+	reg carry;
 	reg [3:0]Y;
 	reg [3:0]Y1;
 	reg [3:0]PC;
 	reg [7:0]PM[15:0];
 	Memory m1(.clk(clk), .enable(mem_enable), .rw(rw), .address(PM[PC][3:0]), .datain(Y), .dataout(mem_out));
-	ALU a1(.clk(clk), .enable(alu_enable), .op1(Y), .op2(Y1), .opc(PM[PC][7:4]), .res(alu_out));
+	ALU a1(.clk(clk), .enable(alu_enable), .op1(Y), .op2(Y1), .opc(PM[PC][7:4]), .carry(carry_out), .res(alu_out));
 	always @ (posedge clk) begin
 		if(PC_reset) begin
 			PC <= 4'b0000;
@@ -29,8 +31,10 @@ module Control_Prog(input clk, input mem_write, input PC_reset, input [3:0]porti
 				portout <= Y;
 			if(mem_enable)
 				Y <= mem_out;
-			if(alu_enable)
+			if(alu_enable) begin
 				Y <= alu_out;
+				carry <= carry_out;
+			end
 			if(transfer_enable)
 				Y1 <= Y;
 			out_enable <= 1'b0;
@@ -55,6 +59,14 @@ module Control_Prog(input clk, input mem_write, input PC_reset, input [3:0]porti
 				4'b0111: out_enable <= 1'b1;
 				4'b1000: transfer_enable <= 1'b1;
 				4'b1001: jmp_enable <= 1'b1;
+				4'b1010: begin
+					 	if(carry)
+							jmp_enable <= 1'b1;
+					 end
+				4'b1011: begin
+					 	if(~carry)
+							jmp_enable <= 1'b1;
+					 end
 			endcase
 		end
 	end
