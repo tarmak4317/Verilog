@@ -29,14 +29,23 @@ module Control_Prog(input clk, input mem_write, input PC_reset, input [3:0]porti
 		if(~mem_write & ~PC_reset) begin
 			if(out_enable)
 				portout <= Y;
+			else
+				portout <= portout;
 			if(mem_enable)
 				Y <= mem_out;
+			else
+				Y <= Y;
 			if(alu_enable) begin
 				Y <= alu_out;
 				carry <= carry_out;
+			end else begin
+				Y <= Y;
+				carry <= carry;
 			end
 			if(transfer_enable)
 				Y1 <= Y;
+			else
+				Y1 <= Y1;
 			out_enable <= 1'b0;
 			alu_enable <= 1'b0;
 			mem_enable <= 1'b0;
