@@ -1,6 +1,6 @@
-module ALU(input [1:0] sel, input [7:0] a, input [7:0] b, output reg [7:0] c);
+module ALU(input [1:0] sel, input [7:0] a, input [7:0] b, output reg [8:0] c);
 	always @ (*) begin
-		c = 8'b00000000;
+		c = 9'b00000000;
 		case(sel)
 			2'b00: c = a + b;
 			2'b01: c = a - b;
